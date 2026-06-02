@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSS Fan</title>
+<style>
+    body{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    background:#f0f0f0;
+}
+
+.fan{
+    position:relative;
+    width:200px;
+    height:200px;
+    animation:rotateFan 1s linear infinite;
+}
+
+.blade{
+    position:absolute;
+    width:80px;
+    height:30px;
+    background:steelblue;
+    border-radius:50px;
+    top:85px;
+    left:60px;
+}
+
+.blade1{
+    transform:rotate(0deg) translateX(50px);
+}
+
+.blade2{
+    transform:rotate(90deg) translateX(50px);
+}
+
+.blade3{
+    transform:rotate(180deg) translateX(50px);
+}
+
+.blade4{
+    transform:rotate(270deg) translateX(50px);
+}
+
+.center{
+    position:absolute;
+    width:40px;
+    height:40px;
+    background:black;
+    border-radius:50%;
+    top:80px;
+    left:80px;
+}
+
+@keyframes rotateFan{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+}
+</style>
+</head>
+<body>
+    <div class="fan">
+        <div class="blade blade1"></div>
+        <div class="blade blade2"></div>
+        <div class="blade blade3"></div>
+        <div class="blade blade4"></div>
+        <div class="center"></div>
+    </div>
+</body>
+</html>
