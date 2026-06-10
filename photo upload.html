@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Upload Page</title>
+    <style>
+        /* Centers the form container on the web page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* The main wrapper container requested */
+        .upload-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+        }
+
+        .upload-container h2 {
+            margin-bottom: 20px;
+            color: #333333;
+        }
+
+        /* Styles the file selection wrapper */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555555;
+        }
+
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        /* Styles the submit button */
+        button[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Container Block -->
+    <div class="upload-container">
+        <h2>Upload Your Photo</h2>
+        
+        <!-- Form element handles the file action payload -->
+        <form >
+            
+            <!-- File input element inside the container -->
+            <div class="form-group">
+                <label for="photoSelect">Select a photo:</label>
+                <input type="file" id="photoSelect" name="photo" accept="image/*" required>
+            </div>
+            
+            <!-- Submit Button element -->
+            <button type="submit">Submit Photo</button>
+            
+        </form>
+    </div>
+
+</body>
+</html>
