@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arrow App</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: white;
+}
+
+/* Splash Screen */
+#splash {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Arrow Logo */
+.arrow-container {
+    text-align: center;
+}
+
+.arrow {
+    font-size: 50px;
+    animation: moveUp 1s infinite;
+}
+
+.arrow:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.arrow:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes moveUp {
+    0% { transform: translateY(0); opacity: 0.5; }
+    50% { transform: translateY(-20px); opacity: 1; }
+    100% { transform: translateY(0); opacity: 0.5; }
+}
+
+/* Forms */
+.container {
+    display: none;
+    padding: 100px;
+    text-align: center;
+}
+
+input {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    width: 80%;
+    max-width: 250px;
+}
+
+button {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.link {
+    color: lightblue;
+    cursor: pointer;
+}
+
+/* Success */
+#home {
+    display: none;
+    text-align: center;
+    margin-top: 100px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Splash Screen -->
+<div id="splash">
+    <div class="arrow-container">
+        <div class="arrow">⬆⬆⬆</div>
+        
+    </div>
+</div>
+
+<!-- Login -->
+<div class="container" id="login">
+    <h2>Login</h2>
+    <input type="text" id="loginName" placeholder="Name">
+    <input type="email" id="loginEmail" placeholder="Email">
+    <input type="password" id="loginPassword" placeholder="Password" maxlength="9">
+    <button onclick="login()">Login</button>
+    <p class="link" onclick="showRegister()">Not registered? Register</p>
+</div>
+
+<!-- Register -->
+<div class="container" id="register">
+    <h2>Register</h2>
+    <input type="text" id="regName" placeholder="Name">
+    <input type="email" id="regEmail" placeholder="Email">
+    <input type="password" id="regPassword" placeholder="Password" maxlength="9">
+    <button onclick="register()">Register</button>
+    <p class="link" onclick="showLogin()">Already have account? Login</p>
+    <button onclick="yes">yes</button>
+</div>
+
+<!-- Home -->
+<div id="home">
+    <h1>Welcome 🎉</h1>
+</div>
+
+<script>
+// Splash delay
+setTimeout(() => {
+    document.getElementById("splash").style.display = "none";
+    document.getElementById("login").style.display = "block";
+}, 4000);
+
+// Show forms
+function showRegister() {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("register").style.display = "block";
+}
+
+function showLogin() {
+    document.getElementById("register").style.display = "none";
+    document.getElementById("login").style.display = "block";
+}
+
+// Register
+function register() {
+    let name = document.getElementById("regName").value;
+    let email = document.getElementById("regEmail").value;
+    let password = document.getElementById("regPassword").value;
+
+    if (!name || !email || !password) {
+        alert("Fill all fields");
+        return;
+    }
+
+    localStorage.setItem("user", JSON.stringify({name, email, password}));
+    alert("Registered Successfully");
+    showLogin();
+}
+
+// Login
+function login() {
+    let name = document.getElementById("loginName").value;
+    let email = document.getElementById("loginEmail").value;
+    let password = document.getElementById("loginPassword").value;
+
+    let storedUser = JSON.parse(localStorage.getItem("user"));
+
+    if (!storedUser) {
+        alert("Please register first!");
+        showRegister();
+        return;
+    }
+
+    if (name === storedUser.name &&
+        email === storedUser.email &&
+        password === storedUser.password) {
+
+        document.getElementById("login").style.display = "none";
+        document.getElementById("home").style.display = "block";
+    } else {
+        alert("Invalid login!");
+    }
+}
+</script>
+
+</body>
+</html>
