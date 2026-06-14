@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSS TV</title>
+    <style>
+ body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background:#e6e6e6;
+}
+
+.tv{
+    width:500px;
+    height:300px;
+    background:#222;
+    padding:15px;
+    border-radius:15px;
+    box-shadow:0 0 15px gray;
+}
+
+.screen{
+    width:100%;
+    height:100%;
+    background:linear-gradient(to right,#00c6ff,#0072ff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    font-family:Arial,sans-serif;
+    border-radius:8px;
+}
+
+.stand{
+    width:20px;
+    height:60px;
+    background:#333;
+}
+
+.base{
+    width:120px;
+    height:15px;
+    background:#333;
+    border-radius:10px;
+}
+    </style>
+</head>
+<body>
+
+<div class="tv">
+    <div class="screen">
+        <h2>SMART TV</h2>
+    </div>
+</div>
+
+<div class="stand"></div>
+<div class="base"></div>
+
+</body>
+</html>
