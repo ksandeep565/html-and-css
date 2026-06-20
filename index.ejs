@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognifyz Task 2: Advanced Validation Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+        
+        body { 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at 80% 20%, #0070f3, transparent 45%),
+                        radial-gradient(circle at 20% 80%, #7928ca, transparent 45%),
+                        linear-gradient(135deg, #0f172a, #1e1b4b);
+            padding: 40px 20px;
+        }
+
+        /* Glassmorphism Input Frame */
+        .glass-card {
+            width: 100%;
+            max-width: 420px;
+            padding: 35px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            margin-bottom: 25px;
+        }
+
+        h2 { color: #fff; font-size: 22px; text-align: center; margin-bottom: 8px; }
+        .subtitle { color: rgba(255, 255, 255, 0.5); font-size: 13px; text-align: center; margin-bottom: 30px; }
+
+        /* Server-Side Error Alert Box */
+        .server-error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Input Form Groupings */
+        .input-group {
+            position: relative;
+            margin-bottom: 22px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+            display: flex;
+            align-items: center;
+            transition: border-bottom-color 0.3s;
+        }
+
+        .input-group:focus-within {
+            border-bottom-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .input-group i {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+            margin-right: 12px;
+            margin-bottom: 8px;
+        }
+
+        .input-group input {
+            width: 100%;
+            background: none;
+            border: none;
+            outline: none;
+            padding: 4px 0 10px 0;
+            color: #ffffff;
+            font-size: 15px;
+        }
+
+        .input-group input::placeholder { color: rgba(255, 255, 255, 0.35); }
+
+        /* Client-Side Validation Warning Message styling */
+        .error-message {
+            color: #fca5a5;
+            font-size: 12px;
+            margin-top: -15px;
+            margin-bottom: 15px;
+            display: none;
+            font-weight: 500;
+        }
+
+        /* Interactive Action Button */
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, #1d4ed8, #7e22ce);
+            border: none;
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(29, 78, 216, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(29, 78, 216, 0.5);
+        }
+
+        /* Glassmorphism Database/Roster Output Component */
+        .roster-card {
+            width: 100%;
+            max-width: 420px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            color: white;
+        }
+
+        .roster-card h3 { font-size: 15px; letter-spacing: 0.5px; color: rgba(255, 255, 255, 0.7); margin-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px; }
+        .roster-list { list-style: none; }
+        
+        .roster-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 14px;
+        }
+        .roster-item:last-child { border-bottom: none; }
+        .roster-name { color: #f8fafc; font-weight: 500; }
+        .roster-age { background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 20px; font-size: 11px; color: #cbd5e1; }
+        .empty-state { text-align: center; color: rgba(255,255,255,0.3); font-size: 13px; padding: 10px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="glass-card">
+        <h2>Register User</h2>
+        <div class="subtitle">Task 2: Front & Back-end Validations</div>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="server-error">
+                <i class="fa-solid fa-triangle-exclamation"></i> <%= error %>
+            </div>
+        <% } %>
+
+        <form action="/add-user" method="POST" onsubmit="return validateForm()">
+            <div class="input-group">
+                <i class="fa-solid fa-id-card"></i>
+                <input type="text" id="fullname" name="fullname" required placeholder="Full Name" autocomplete="off">
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-calendar-days"></i>
+                <input type="number" id="age" name="age" required placeholder="Age">
+            </div>
+            <div id="clientError" class="error-message"></div>
+
+            <button type="submit" class="btn-submit">SUBMIT & SAVE</button>
+        </form>
+    </div>
+
+    <div class="roster-card">
+        <h3><i class="fa-solid fa-database" style="font-size: 12px; margin-right: 6px;"></i> SERVER-SIDE REPOSITORY</h3>
+        <ul class="roster-list">
+            <% if (users && users.length > 0) { %>
+                <% users.forEach(function(user) { %>
+                    <li class="roster-item">
+                        <span class="roster-name"><%= user.name %></span>
+                        <span class="roster-age">Age: <%= user.age %></span>
+                    </li>
+                <% }) %>
+            <% } else { %>
+                <div class="empty-state">No records found inside temporary array database.</div>
+            <% } %>
+        </ul>
+    </div>
+
+    <script>
+        function validateForm() {
+            const ageInput = document.getElementById('age').value;
+            const errorDiv = document.getElementById('clientError');
+
+            // Complex validation rule assertion
+            if (ageInput <= 0 || ageInput > 120) {
+                errorDiv.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Please enter a realistic age between 1 and 120.`;
+                errorDiv.style.display = "block";
+                return false; // Intercepts transmission pipeline execution loop
+            }
+
+            errorDiv.style.display = "none";
+            return true; // Pipeline check clean, pass payload upstream to endpoint
+        }
+    </script>
+
+</body>
+</html>
